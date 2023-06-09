@@ -33,12 +33,10 @@ auto merge = [](flux::sequence auto seq) -> interval_t
 
 int main()
 {
-    std::vector<interval_t> intervals = {{2, 4}, {7, 9}, {11, 13}, {6, 7}, {0, 3}};
+    std::vector<interval_t> intervals1 = {{0, 3}, {7, 9}, {11, 13}};
+    std::vector<interval_t> intervals2 = {{2, 4}, {6, 7}, {7, 9}};
 
-    // sort intervals according to begin
-    flux::sort(intervals, flux::proj(std::less{}, &interval_t::begin));
-
-    flux::ref(intervals)
+    flux::set_union(flux::ref(intervals1), flux::ref(intervals2), flux::proj(std::less{}, &interval_t::begin))
          .chunk_by(is_overlapped)
          .map(merge)
          .write_to(std::cout);
